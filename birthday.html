@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Happy Birthday</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=Inter:wght@300;400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ===== EDIT HERE: colors + fonts ===== */
+			:root {
+				--burgundy: #6d0f26;
+				--burgundy-deep: #3d0715;
+				--black: #0b0b0b;
+				--white: #fbf8f6;
+				--serif: "Playfair Display", Georgia, serif;
+				--sans: "Inter", system-ui, sans-serif;
+				--radius: 32px;
+			}
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			html {
+				scroll-behavior: smooth;
+			}
+			body {
+				font-family: var(--sans);
+				background: var(--white);
+				color: var(--black);
+				overflow-x: hidden;
+				-webkit-font-smoothing: antialiased;
+			}
+			img,
+			video {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			/* gradient shows if an image hasn't loaded yet */
+			.ph {
+				background: linear-gradient(
+					135deg,
+					var(--burgundy),
+					var(--burgundy-deep)
+				);
+			}
+
+			/* ---------- HERO ---------- */
+			.hero {
+				position: relative;
+				height: 100svh;
+				min-height: 560px;
+				background: var(--black);
+				color: var(--white);
+				overflow: hidden;
+				display: flex;
+				align-items: flex-end;
+			}
+			.hero .bg {
+				position: absolute;
+				inset: 0;
+			}
+			.hero .bg img {
+				object-position: center 20%;
+				transform: scale(1.08);
+				animation: settle 2.4s ease-out forwards;
+			}
+			@keyframes settle {
+				to {
+					transform: scale(1);
+				}
+			}
+			.hero::after {
+				content: "";
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(
+					to top,
+					var(--black) 2%,
+					rgba(61, 7, 21, 0.55) 40%,
+					transparent 75%
+				);
+			}
+			.hero-copy {
+				position: relative;
+				z-index: 2;
+				padding: 0 6vw 9vh;
+				max-width: 1100px;
+			}
+			.eyebrow {
+				letter-spacing: 0.35em;
+				text-transform: uppercase;
+				font-size: 0.75rem;
+				opacity: 0.8;
+				margin-bottom: 1rem;
+			}
+			.hero h1 {
+				font-family: var(--serif);
+				font-weight: 500;
+				font-size: clamp(3rem, 11vw, 9rem);
+				line-height: 0.95;
+			}
+			.hero h1 em {
+				color: #e8a0b4;
+			}
+			.hero p {
+				margin-top: 1.2rem;
+				font-weight: 300;
+				font-size: clamp(1rem, 2vw, 1.3rem);
+				opacity: 0.85;
+			}
+			.scroll-hint {
+				position: absolute;
+				z-index: 2;
+				right: 6vw;
+				bottom: 9vh;
+				font-size: 0.7rem;
+				letter-spacing: 0.3em;
+				text-transform: uppercase;
+				writing-mode: vertical-rl;
+				opacity: 0.7;
+			}
+
+			/* ---------- GENERIC SECTIONS ---------- */
+			section {
+				position: relative;
+			}
+			.pad {
+				padding: 18vh 6vw;
+			}
+			.white {
+				background: var(--white);
+				color: var(--black);
+			}
+			.burgundy {
+				background: var(--burgundy);
+				color: var(--white);
+			}
+			.black {
+				background: var(--black);
+				color: var(--white);
+			}
+			.big {
+				font-family: var(--serif);
+				font-size: clamp(1.8rem, 5vw, 4rem);
+				line-height: 1.2;
+				max-width: 18em;
+			}
+			.small-label {
+				letter-spacing: 0.3em;
+				text-transform: uppercase;
+				font-size: 0.75rem;
+				opacity: 0.6;
+				margin-bottom: 1.5rem;
+			}
+
+			/* word-by-word scroll reveal (fade -> visible) */
+			.reveal .w {
+				opacity: 0.12;
+				transition: opacity 0.5s ease;
+				display: inline-block;
+				margin-right: 0.25em;
+			}
+			.reveal .w.on {
+				opacity: 1;
+			}
+
+			/* generic fade-up */
+			.fade {
+				opacity: 0;
+				transform: translateY(40px);
+				transition:
+					opacity 1s ease,
+					transform 1s ease;
+			}
+			.fade.in {
+				opacity: 1;
+				transform: none;
+			}
+
+			/* ---------- STICKY STACKING PICTURES ---------- */
+			.stack {
+				background: var(--burgundy-deep);
+				color: var(--white);
+				padding: 14vh 5vw 20vh;
+			}
+			.stack-head {
+				text-align: center;
+				margin-bottom: 12vh;
+			}
+			.stack-head .big {
+				margin: 0 auto;
+			}
+			.card {
+				position: sticky;
+				height: 78vh;
+				max-width: 1000px;
+				margin: 0 auto 22vh;
+				border-radius: var(--radius);
+				overflow: hidden;
+				box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+				transform-origin: center top;
+				transition: transform 0.2s linear;
+			}
+			.card::after {
+				content: "";
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(
+					to top,
+					rgba(0, 0, 0, 0.75),
+					transparent 55%
+				);
+			}
+			.card .cap {
+				position: absolute;
+				z-index: 2;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				padding: clamp(1.2rem, 4vw, 3rem);
+			}
+			.card h3 {
+				font-family: var(--serif);
+				font-weight: 500;
+				font-size: clamp(1.5rem, 4vw, 2.8rem);
+				margin: 0.4rem 0;
+			}
+			.card p {
+				font-weight: 300;
+				max-width: 32em;
+				opacity: 0.9;
+				line-height: 1.5;
+			}
+			/* when the last card is done, normal scrolling resumes automatically */
+
+			/* ---------- BLENDED BACKGROUND IMAGE ---------- */
+			.blend {
+				overflow: hidden;
+				min-height: 110vh;
+				display: flex;
+				align-items: center;
+			}
+			.blend .bgimg {
+				position: absolute;
+				inset: 0;
+				-webkit-mask-image: linear-gradient(
+					to bottom,
+					transparent,
+					#000 30%,
+					#000 70%,
+					transparent
+				);
+				mask-image: linear-gradient(
+					to bottom,
+					transparent,
+					#000 30%,
+					#000 70%,
+					transparent
+				);
+				opacity: 0.55;
+			}
+			.blend .inner {
+				position: relative;
+				z-index: 2;
+			}
+
+			/* ---------- WISHES / FOOTER ---------- */
+			.grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+				gap: 1.5rem;
+				margin-top: 8vh;
+			}
+			.pic {
+				aspect-ratio: 3/4;
+				border-radius: var(--radius);
+				overflow: hidden;
+			}
+			.pic:nth-child(even) {
+				margin-top: 3rem;
+			}
+
+			/* ---------- LOVE LETTER ---------- */
+			.love {
+				display: grid;
+				grid-template-columns: 1fr 1.2fr;
+				gap: 6vw;
+				padding: 18vh 6vw;
+				align-items: start;
+			}
+			.love-left {
+				position: sticky;
+				top: 14vh;
+			}
+			.love-title {
+				font-family: var(--serif);
+				font-weight: 500;
+				font-size: clamp(2.6rem, 7vw, 6rem);
+				line-height: 1;
+			}
+			.love-title em {
+				color: #e8a0b4;
+			}
+			.love-intro {
+				margin-top: 2rem;
+				font-weight: 300;
+				font-size: clamp(1rem, 1.6vw, 1.2rem);
+				line-height: 1.7;
+				max-width: 26em;
+			}
+			.love-list {
+				display: flex;
+				flex-direction: column;
+				gap: 2.2rem;
+			}
+			.reason {
+				display: flex;
+				gap: 1.4rem;
+				align-items: flex-start;
+				padding: 1.6rem 1.8rem;
+				border-radius: 999px 999px 999px 999px / 60px;
+				background: rgba(255, 255, 255, 0.07);
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				backdrop-filter: blur(6px);
+			}
+			.reason .num {
+				flex: none;
+				width: 3.2rem;
+				height: 3.2rem;
+				border-radius: 50%;
+				display: grid;
+				place-items: center;
+				background: var(--white);
+				color: var(--burgundy);
+				font-family: var(--serif);
+				font-size: 1.2rem;
+			}
+			.reason p {
+				font-size: clamp(1rem, 1.8vw, 1.3rem);
+				line-height: 1.5;
+				font-weight: 300;
+				padding-top: 0.5rem;
+			}
+			@media (max-width: 800px) {
+				.love {
+					grid-template-columns: 1fr;
+					padding: 14vh 6vw;
+				}
+				.love-left {
+					position: static;
+				}
+				.reason {
+					border-radius: 32px;
+				}
+			}
+			footer {
+				padding: 14vh 6vw;
+				text-align: center;
+			}
+			footer.end {
+				position: relative;
+				overflow: hidden;
+				min-height: 90vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			footer.end .bgimg {
+				position: absolute;
+				inset: 0;
+				opacity: 0.5;
+				-webkit-mask-image: linear-gradient(
+					to bottom,
+					transparent,
+					#000 35%,
+					#000 100%
+				);
+				mask-image: linear-gradient(
+					to bottom,
+					transparent,
+					#000 35%,
+					#000 100%
+				);
+			}
+			footer.end .inner {
+				position: relative;
+				z-index: 2;
+			}
+			.pic {
+				position: relative;
+			}
+			.pic::after {
+				content: "";
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(
+					to top,
+					rgba(0, 0, 0, 0.7),
+					transparent 55%
+				);
+			}
+			.pic .cap {
+				position: absolute;
+				z-index: 2;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				padding: 1.1rem;
+				color: var(--white);
+				font-size: 0.9rem;
+				font-weight: 300;
+				line-height: 1.4;
+			}
+			footer .big {
+				margin: 0 auto;
+			}
+
+			@media (max-width: 700px) {
+				.card {
+					height: 70vh;
+					border-radius: 24px;
+				}
+				.pic:nth-child(even) {
+					margin-top: 0;
+				}
+				.scroll-hint {
+					display: none;
+				}
+			}
+
+			/* sound button on video cards */
+			.snd {
+				position: absolute;
+				z-index: 3;
+				top: 1rem;
+				right: 1rem;
+				border: 0;
+				cursor: pointer;
+				padding: 0.55rem 1rem;
+				border-radius: 999px;
+				background: rgba(0, 0, 0, 0.45);
+				color: var(--white);
+				font: 500 0.7rem var(--sans);
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				backdrop-filter: blur(6px);
+			}
+
+			/* ---------- LARGE SCREENS: show the WHOLE background picture ----------
+			   On wide screens "cover" zooms in and crops a lot, so here the picture is
+			   shown in full, centred, with its edges fading into the background colour.
+			   (Delete this block to go back to the cropped, full-width look.) */
+			@media (min-width: 1100px) {
+				.hero .bg {
+					background: var(--black);
+				}
+				.bgimg {
+					display: flex;
+					justify-content: center;
+					background: none;
+				}
+				.hero .bg img,
+				.bgimg img {
+					width: auto;
+					max-width: 100%;
+					height: 100%;
+					margin: 0 auto;
+					object-fit: contain;
+					-webkit-mask-image: linear-gradient(
+						to right,
+						transparent,
+						#000 14%,
+						#000 86%,
+						transparent
+					);
+					mask-image: linear-gradient(
+						to right,
+						transparent,
+						#000 14%,
+						#000 86%,
+						transparent
+					);
+				}
+				.blend .bgimg {
+					-webkit-mask-image: linear-gradient(
+						to bottom,
+						transparent,
+						#000 14%,
+						#000 86%,
+						transparent
+					);
+					mask-image: linear-gradient(
+						to bottom,
+						transparent,
+						#000 14%,
+						#000 86%,
+						transparent
+					);
+				}
+				footer.end .bgimg {
+					-webkit-mask-image: linear-gradient(
+						to bottom,
+						transparent,
+						#000 20%,
+						#000 100%
+					);
+					mask-image: linear-gradient(
+						to bottom,
+						transparent,
+						#000 20%,
+						#000 100%
+					);
+				}
+			}
+
+			/* photo 9 only: video keeps its own shape, leftover space in the card is black */
+			#stack .card.has-video:last-child {
+				background: #000;
+			}
+			#stack .card.has-video:last-child video {
+				object-fit: contain;
+				object-position: center;
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				* {
+					animation: none !important;
+					transition: none !important;
+				}
+				.reveal .w {
+					opacity: 1;
+				}
+				.fade {
+					opacity: 1;
+					transform: none;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<!-- ===== PHOTO 1 of 17: HERO (big first screen). Change the src below. ===== -->
+		<header class="hero">
+			<div class="bg ph">
+				<img
+					src=".\assets\photo_2026-11-09_23-31-35.jpg"
+					alt="Birthday celebrant"
+				/>
+			</div>
+			<div class="hero-copy">
+				<p class="eyebrow">A celebration of you</p>
+				<h1>Happy <em>Birthday</em>,<br />Obaseyifunmi</h1>
+				<p>It's World Tofunmi Dayyy.</p>
+			</div>
+			<span class="scroll-hint">Scroll</span>
+		</header>
+
+		<!-- Intro text, reveals word by word as you scroll -->
+		<section class="white pad">
+			<p class="small-label">A new birthday, a new season</p>
+			<p class="big reveal">
+				Every new year has brought a flower, who's not ashamed to bloom
+				radiantly. She keeps growing in her garden, becoming much more precious.
+			</p>
+			<br />
+			<p class="big reveal">
+				It brings a woman. One who looks her challenges in the eyes, overcomes
+				and thrives.
+			</p>
+			<br />
+			<p class="big reveal">
+				I'm just happy to be able to see her be the best she can be, always. To
+				be there, and keep cheering her on. Happy birthday, my darling. I love
+				you.
+			</p>
+		</section>
+
+		<!-- STICKY STACK: each card stays put while the next slides over it -->
+		<section class="stack">
+			<div class="stack-head">
+				<p class="small-label">Memory lane</p>
+				<p class="big reveal">Remember these?</p>
+			</div>
+			<div id="stack"></div>
+		</section>
+
+		<!-- ===== PHOTO 10 of 17: blended background photo (black section). Change the src below. Edit the sentence in the <p class="big reveal"> too. ===== -->
+		<section class="black blend">
+			<div class="bgimg ph">
+				<img src="./assets\supermodel.jpg" alt="" />
+			</div>
+			<div class="pad inner">
+				<p class="small-label"></p>
+				<p class="big reveal">The super model herself.</p>
+			</div>
+		</section>
+
+		<!-- ===== Text-only section (the three "We stayed on this call..." paragraphs) ===== -->
+		<section class="white pad">
+			<p class="big reveal">
+				We stayed on this call for hours, with you trying a new look and asking
+				how it was.
+			</p>
+			<p class="big reveal">
+				I was just happy to see your smile, to see how excited you were when you
+				got a bit closer to what you wanted.
+			</p>
+			<br />
+			<p class="big reveal">
+				All the while I'm thinking, "Is it even possible for a look you go for
+				to be anything other than stunning?"
+			</p>
+		</section>
+
+		<!-- ===== LOVE LETTER SECTION: "Reasons I love you". Edit the intro paragraph below, and the reasons in the "reasons" list in the script. ===== -->
+		<section class="burgundy love">
+			<div class="love-left">
+				<h2 class="love-title">Reasons I<br /><em>love you</em></h2>
+				<!-- EDIT: your short write-up / intro -->
+			</div>
+			<div class="love-list" id="reasons"></div>
+		</section>
+
+		<!-- ===== PHOTO 17 of 17: closing photo blended into the footer. Change the src below. ===== -->
+		<footer class="burgundy end">
+			<div class="bgimg ph">
+				<img src="./assets/smilebeautiful.jpg" alt="" />
+			</div>
+			<div class="inner">
+				<p class="big reveal">
+					Here's to many more years of your beautiful smile
+				</p>
+				<p class="big reveal">Happy birthday, my love</p>
+			</div>
+		</footer>
+
+		<script>
+			/* =====================================================================
+   PHOTOS 2-9 of 17: THE STICKY STACK (memory lane)
+   Each block = one picture card.
+     img   -> the picture (file path or URL)
+     title -> heading on the picture
+     text  -> your words about what was happening
+   TO DELETE a picture: remove its whole { ... }, line (and keep the commas).
+   TO ADD one: copy a block and paste it before the closing ]
+   ===================================================================== */
+			const memories = [
+				{
+					// PHOTO 2
+					img: "./assets/photo_2026-11-09_23-31-23.jpg",
+					title: "Quirky Tofunmi",
+					text: "I still dunno how you came up with this pose. But I love ittt",
+				},
+				{
+					// PHOTO 3
+					img: "./assets/photo_2026-02-22_17-40-32.jpg",
+					title: "Awwn",
+					text: "Is it a bird? Is it a plane? No, it's my girl, being fabulous.",
+				},
+				{
+					// PHOTO 4
+					img: "./assets/photo_2026-05-06_22-15-17.jpg",
+					title: "Have you seen a beautiful girl today?",
+					text: "",
+				},
+				{
+					// PHOTO 5
+					img: "./assets/this.jpg",
+					title: "A quick snap",
+					text: "You took this picture on my tablet out of the blue, and I love it. You look so happy and radiant.",
+				},
+				{
+					// PHOTO 6
+					img: "./assets/photo_2026-11-09_23-32-55.jpg",
+					title: "My Efikoo",
+					text: "You're so driven when it comes to what you want. I get so proud seeing you work towards your goals. Makes me fall for you all over again.",
+				},
+				{
+					// PHOTO 7
+					img: "./assets/photo_2026-11-09_23-33-57.jpg",
+					title: "Did I mention she's a genius?",
+					text: "You think say I dey play with wetin I talk for the last picture?",
+				},
+				{
+					// PHOTO 8
+					img: "./assets/exhausted.MOV",
+					title: "You have a heart of gold",
+					text: "I remember how exhausted you were. Your feet hurt, some guys were super rude to you. But you still served and engaged, what a superwoman!",
+				},
+				{
+					// PHOTO 9
+					img: "./assets/super_funnydance.MP4",
+					title: "My dance queen",
+					text: "Guess what part of this dance is my favourite?",
+				},
+			];
+
+			/* build stacking cards: each one sticks slightly lower than the last */
+			const stack = document.getElementById("stack");
+			/* a card is a video if its file ends in .mp4 / .mov / .webm / .m4v */
+			const isVideo = (src) => /\.(mp4|mov|webm|m4v|ogv)(\?.*)?$/i.test(src);
+			stack.innerHTML = memories
+				.map((m, i) => {
+					const vid = isVideo(m.img);
+					const media = vid
+						? `<video src="${m.img}" muted loop playsinline preload="metadata"></video>
+    <button class="snd" type="button" aria-label="Toggle sound">Sound off</button>`
+						: `<img src="${m.img}" alt="${m.title}" loading="lazy">`;
+					return `
+  <article class="card ph${vid ? " has-video" : ""}" style="top:calc(9vh + ${i * 22}px);z-index:${i + 1}">
+    ${media}
+    <div class="cap"><h3>${m.title}</h3><p>${m.text}</p></div>
+  </article>`;
+				})
+				.join("");
+
+			/* sound on/off button on video cards (videos start muted so browsers allow autoplay) */
+			stack.addEventListener("click", (e) => {
+				const b = e.target.closest(".snd");
+				if (!b) return;
+				const v = b.parentElement.querySelector("video");
+				v.muted = !v.muted;
+				b.textContent = v.muted ? "Sound off" : "Sound on";
+			});
+			/* =====================================================================
+   REASONS I LOVE YOU
+   One line per reason. Add, delete or reword freely (keep the quotes
+   and the comma at the end of each line except the last).
+   ===================================================================== */
+			const reasons = [
+				"You make every room warmer, every day brighter, and every memory worth keeping by just being Jesutofunmi. Still blows my mind to date.",
+				"There's probably a million things you'd do before you run out of things that make you spontaneously funny. You're a character. But you're my character.   ",
+				"I love the woman I see when you dedicate yourself to your goals, the woman I see when you refuse to give up, the woman I see when, after tears, you dust yourself up and keep going. You make me want to stand by you, support you and see you grow  ",
+				"I love how you can be so strong and independent, yet so caring and loving at the same time.",
+				"I love the little excited skip you have when you're happy. I often forget what it means to just be excited like a child, but then I think of you",
+				"I'm grateful for the gift of you, the day we met, the way you love me, for having the privilege of seeing you grow.",
+			];
+			document.getElementById("reasons").innerHTML = reasons
+				.map(
+					(r, i) => `
+  <div class="reason fade"><span class="num">${i + 1}</span><p>${r}</p></div>`,
+				)
+				.join("");
+
+			/* word-by-word reveal tied to scroll position */
+			const reveals = [...document.querySelectorAll(".reveal")];
+			reveals.forEach((el) => {
+				el.innerHTML = el.textContent
+					.trim()
+					.split(/\s+/)
+					.map((w) => `<span class="w">${w}</span>`)
+					.join(" ");
+			});
+			/* every word appears on its own as it rises into view, so text always
+			   comes in one word after another, top to bottom (even across paragraphs) */
+			const words = reveals.flatMap((el) => [...el.children]);
+			function updateReveal() {
+				const line =
+					innerHeight *
+					0.82; /* raise to reveal later, lower to reveal sooner */
+				const w = innerWidth;
+				words.forEach((el) => {
+					const r = el.getBoundingClientRect();
+					/* tiny left-to-right lag inside each line */
+					el.classList.toggle("on", r.top + (r.left / w) * 36 < line);
+				});
+			}
+
+			/* fade-up for anything with .fade */
+			const io = new IntersectionObserver(
+				(es) =>
+					es.forEach((e) => {
+						if (e.isIntersecting) {
+							e.target.classList.add("in");
+							io.unobserve(e.target);
+						}
+					}),
+				{ threshold: 0.15 },
+			);
+			document.querySelectorAll(".fade").forEach((el) => io.observe(el));
+
+			/* cards shrink slightly as the next one covers them */
+			const cards = [...document.querySelectorAll(".card")];
+			function updateCards() {
+				cards.forEach((c, i) => {
+					const next = cards[i + 1];
+					if (!next) {
+						return;
+					}
+					const d =
+						next.getBoundingClientRect().top - c.getBoundingClientRect().top;
+					const p = Math.min(1, Math.max(0, 1 - d / (innerHeight * 0.7)));
+					c.style.transform = `scale(${1 - p * 0.06})`;
+				});
+			}
+			/* videos play only while their card is reached, and pause when covered or left behind */
+			const videoCards = cards.filter((c) => c.classList.contains("has-video"));
+			function updateVideos() {
+				const vh = innerHeight;
+				videoCards.forEach((c) => {
+					const v = c.querySelector("video");
+					const r = c.getBoundingClientRect();
+					const next = c.nextElementSibling;
+					const nextTop = next ? next.getBoundingClientRect().top : Infinity;
+					const active =
+						r.top < vh * 0.5 && r.bottom > vh * 0.15 && nextTop > vh * 0.45;
+					if (active && v.paused) v.play().catch(() => {});
+					else if (!active && !v.paused) v.pause();
+				});
+			}
+			let tick = false;
+			function onScroll() {
+				if (tick) return;
+				tick = true;
+				requestAnimationFrame(() => {
+					updateReveal();
+					updateCards();
+					updateVideos();
+					tick = false;
+				});
+			}
+			addEventListener("scroll", onScroll, { passive: true });
+			addEventListener("resize", onScroll);
+			onScroll();
+		</script>
+	</body>
+</html>
